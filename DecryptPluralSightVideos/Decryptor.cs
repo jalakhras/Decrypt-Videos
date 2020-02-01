@@ -90,7 +90,7 @@ namespace DecryptPluralSightVideos
         /// <param name="outputFolder">Destination of output course</param>
         public void DecryptAllFolders(string folderPath, string outputFolder = "")
         {
-            folderPath = @"C:\Users\Jassar\AppData\Local\Pluralsight\courses";
+            //folderPath = @"F:\PluralsightApp\courses";
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
@@ -188,7 +188,7 @@ namespace DecryptPluralSightVideos
         public bool RemoveCourseInDb(string coursePath)
         {
             string courseName = GetFolderName(coursePath);
-
+            DatabaseConnection = new SQLiteConnection(@"C:\Users\JassarAl-akhras\AppData\Local\Pluralsight.db"); 
             var cmd = DatabaseConnection.CreateCommand();
             cmd.CommandText = @"DELETE FROM Course 
                                 WHERE Name = @courseName";

@@ -7,9 +7,8 @@
         public bool RemoveFolderAfterDecryption { get; set; }
         public bool UsageCommand { get; set; }
         public bool CreateTranscript { get; set; } = true;
-
-        public string InputPath { get; set; } = @"F:\Pluralsight\courses";
-        public string DatabasePath { get; set; } = @"C:\Users\Jassar\AppData\Local\Pluralsight\pluralsight.db";
+        public string InputPath { get; set; } = @"F:\PluralsightApp\courses";
+        public string DatabasePath { get; set; } = @"C:\Users\JassarAl-akhras\AppData\Local\Pluralsight\pluralsight.db";
         public string OutputPath { get; set; } = @"F:\Courses premium\new Pluralsight courses Path";
 
     }
