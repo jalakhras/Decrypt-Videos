@@ -117,70 +117,74 @@ namespace DecryptPluralSightVideos
 
                     // Create new course path with the output path
                     var newCoursePath = Path.Combine(outputFolder, CleanPath(course.CourseTitle));
+                    if (!Directory.Exists(newCoursePath))
+                    {
 
-                    DirectoryInfo courseInfo = Directory.Exists(newCoursePath)
+
+                        DirectoryInfo courseInfo = Directory.Exists(newCoursePath)
                         ? new DirectoryInfo(newCoursePath)
                         : Directory.CreateDirectory(newCoursePath);
 
-                    // Move all folders and its contents to newCoursePath
+                        // Move all folders and its contents to newCoursePath
 
-                    #region Move file
+                        #region Move file
 
-                    /*
-                     
-                    if (Path.GetPathRoot(newCoursePath) != Path.GetPathRoot(coursePath))
-                    {
-                        Microsoft.VisualBasic.FileIO.FileSystem.MoveDirectory(coursePath, newCoursePath);
-                    }
-                    else
-                    {
-                        Directory.Move(coursePath, newCoursePath);
-                    }
+                        /*
 
-                    */
-
-                    #endregion
-
-                    // Get list all modules in current course
-                    List<Module> listModules = GetModulesFromDb(course.CourseName);
-
-                    if (listModules.Count > 0)
-                    {
-                        // Get each module
-                        foreach (Module module in listModules)
+                        if (Path.GetPathRoot(newCoursePath) != Path.GetPathRoot(coursePath))
                         {
-                            // Generate module hash name
-                            string moduleHash = ModuleHash(module.ModuleName, module.AuthorHandle);
-                            // Generate module path
-                            string moduleHashPath = Path.Combine(coursePath, moduleHash);
-                            // Create new module path with decryption name
-                            string newModulePath = Path.Combine(courseInfo.FullName,
-                                module.ModuleIndex.ToString().PadLeft(2, '0') + ". " + CleanPath(module.ModuleTitle));
-                            // If length too long, rename it
-                            if (newModulePath.Length > 240)
-                            {
-                                newModulePath = Path.Combine(courseInfo.FullName,
-                                    module.ModuleIndex.ToString().PadLeft(2, '0') + "");
-                            }
+                            Microsoft.VisualBasic.FileIO.FileSystem.MoveDirectory(coursePath, newCoursePath);
+                        }
+                        else
+                        {
+                            Directory.Move(coursePath, newCoursePath);
+                        }
 
-                            if (Directory.Exists(moduleHashPath))
+                        */
+
+                        #endregion
+
+                        // Get list all modules in current course
+                        List<Module> listModules = GetModulesFromDb(course.CourseName);
+
+                        if (listModules.Count > 0)
+                        {
+                            // Get each module
+                            foreach (Module module in listModules)
                             {
-                                DirectoryInfo moduleInfo = Directory.Exists(newModulePath)
-                                    ? new DirectoryInfo(newModulePath)
-                                    : Directory.CreateDirectory(newModulePath);
-                                // Decrypt all videos in current module folder
-                                DecryptAllVideos(moduleHashPath, module.ModuleId, moduleInfo.FullName);
-                            }
-                            else
-                            {
-                                WriteToConsole(
-                                    "Folder " + moduleHash +
-                                    " cannot be found in the current course path.",
-                                    ConsoleColor.Red);
+                                // Generate module hash name
+                                string moduleHash = ModuleHash(module.ModuleName, module.AuthorHandle);
+                                // Generate module path
+                                string moduleHashPath = Path.Combine(coursePath, moduleHash);
+                                // Create new module path with decryption name
+                                string newModulePath = Path.Combine(courseInfo.FullName,
+                                    module.ModuleIndex.ToString().PadLeft(2, '0') + ". " + CleanPath(module.ModuleTitle));
+                                // If length too long, rename it
+                                if (newModulePath.Length > 240)
+                                {
+                                    newModulePath = Path.Combine(courseInfo.FullName,
+                                        module.ModuleIndex.ToString().PadLeft(2, '0') + "");
+                                }
+
+                                if (Directory.Exists(moduleHashPath))
+                                {
+                                    DirectoryInfo moduleInfo = Directory.Exists(newModulePath)
+                                        ? new DirectoryInfo(newModulePath)
+                                        : Directory.CreateDirectory(newModulePath);
+                                    // Decrypt all videos in current module folder
+                                    DecryptAllVideos(moduleHashPath, module.ModuleId, moduleInfo.FullName);
+                                }
+                                else
+                                {
+                                    WriteToConsole(
+                                        "Folder " + moduleHash +
+                                        " cannot be found in the current course path.",
+                                        ConsoleColor.Red);
+                                }
                             }
                         }
+                        WriteToConsole("Decryption " + course.CourseTitle + " has been completed!", ConsoleColor.Magenta);
                     }
-                    WriteToConsole("Decryption " + course.CourseTitle + " has been completed!", ConsoleColor.Magenta);
                 }
             }
         }
